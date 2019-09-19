@@ -1,0 +1,10 @@
+---
+- name: Configuring base install
+  hosts: all
+  roles:
+    - yum-update
+    - users
+    - packages
+    - motd
+    - nginx
+    - selinux

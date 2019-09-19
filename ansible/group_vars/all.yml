@@ -1,0 +1,5 @@
+nginx_vconf_src: files/conf/virtual.conf
+nginx_vconf_dest: /etc/nginx/conf.d/virtual.conf
+
+nginx_www_src: files/www
+nginx_www_dest: /var/www

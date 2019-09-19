@@ -1,0 +1,26 @@
+- name: Add new user
+  user:
+    name: "{{ user }}"
+    group: wheel
+    state: present
+    shell: /bin/bash
+
+- name: Allow passwordless sudo for wheel
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%wheel\s'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    
+- name: Applying new user public key
+  authorized_key:
+    user: "{{ user }}"
+    state: present
+    key: "{{ lookup('file', {{ public_key }})}}"
+    
+- name: Disable password authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^PasswordAuthentication\s'
+    line: 'PasswordAuthentication no'

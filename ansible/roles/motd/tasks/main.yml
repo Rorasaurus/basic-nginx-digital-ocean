@@ -1,0 +1,7 @@
+- name: Setting message of the day
+  copy:
+    src: roles/motd/files/motd
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: '0644'

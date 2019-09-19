@@ -1,0 +1,4 @@
+packages:
+  - vim
+  - epel-release
+  - yum-plugin-fastestmirror

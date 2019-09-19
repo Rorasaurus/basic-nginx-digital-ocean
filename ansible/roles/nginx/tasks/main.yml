@@ -1,0 +1,54 @@
+- name: Installing NGINX 
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - nginx
+
+- name: Copy NGINX config files
+  copy:
+    src: "{{ nginx_vconf_src }}"
+    dest: "{{ nginx_vconf_dest }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create www virtual directory
+  file:
+    path: "{{ nginx_www_dest }}"
+    owner: root
+    group: root
+    mode: 0655
+    state: directory
+    
+- name: Create sites directories
+  file:
+    path: "{{ nginx_www_dest }}/{{ item }}"
+    owner: nginx
+    group: nginx
+    mode: 0755
+    state: directory
+  with_items:
+    - "{{ sites }}"
+    
+- name: Copy www
+  synchronize:
+    src: "{{ nginx_www_src }}/{{ item }}"
+    dest: "{{ nginx_www_dest }}"
+  with_items:
+    - "{{ sites }}"
+
+- name: Set www permissions
+  file:
+    path: "{{ nginx_www_dest }}/{{ item }}"
+    recurse: yes
+    owner: nginx
+    group: nginx
+    mode: 0755
+  with_items:
+    - "{{ sites }}"
+
+- name: Enable NGINX
+  systemd:
+    name: nginx
+    state: restarted

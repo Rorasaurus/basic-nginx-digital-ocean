@@ -1,0 +1,11 @@
+- name: Setting SELinux to enforcing
+  selinux:
+    policy: targeted
+    state: enforcing
+    
+- name: Configure SELinux to allow static NGINX pages
+  command: setsebool -P httpd_can_network_connect on
+  
+- name: Define SELinux allowed static pages dir
+  command: chcon -Rt httpd_sys_content_t "{{ nginx_www_dest }}"
+  
